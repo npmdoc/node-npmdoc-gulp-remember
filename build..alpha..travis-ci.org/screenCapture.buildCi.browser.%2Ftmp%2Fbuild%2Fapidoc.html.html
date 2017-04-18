@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="http://github.com/ahaurw01/gulp-remember"
-
-    >gulp-remember (v0.3.1)</a>
+    <a href="http://github.com/ahaurw01/gulp-remember">gulp-remember (v0.3.1)</a>
 </h1>
 <h4>Adds previously seen files back into the stream.</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-remember">module gulp-remember</a><ol>
 
@@ -174,10 +167,10 @@
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function gulpRemember(cacheName) {
-  var cache; // the files we&#x27;ve ever put our hands on in the current stream
+  var cache; // the files we've ever put our hands on in the current stream
 
-  if (cacheName !== undefined &#x26;&#x26; typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
-    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;)(name); where name is undefined, number or string&#x27;);
+  if (cacheName !== undefined &amp;&amp; typeof cacheName !== 'number' &amp;&amp; typeof cacheName !== 'string') {
+    throw new util.PluginError(pluginName, 'Usage: require("gulp-remember")(name); where name is undefined, number or string');
   }
   cacheName = cacheName || defaultName; // maybe need to use a default cache
   caches[cacheName] = caches[cacheName] || {}; // maybe initialize the named cache
@@ -190,7 +183,7 @@
   }
 
   function flush(callback) {
-    // add all files we&#x27;ve ever seen back into the stream
+    // add all files we've ever seen back into the stream
     for (var key in cache) {
       if (cache.hasOwnProperty(key)) {
         this.push(cache[key]); // add this file back into the current stream
@@ -217,9 +210,9 @@
   if (arguments.length === 0) {
     cacheName = defaultName;
   }
-  if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
-    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).cacheFor(cacheName); where cacheName is undefined, number
- or string&#x27;);
+  if (typeof cacheName !== 'number' &amp;&amp; typeof cacheName !== 'string') {
+    throw new util.PluginError(pluginName, 'Usage: require("gulp-remember").cacheFor(cacheName); where cacheName is undefined, number
+ or string');
   }
   return caches[cacheName];
 }</pre></li>
@@ -257,14 +250,14 @@ Get a raw remember cache. This can be useful for checking state of the cache, li
     cacheName = defaultName;
   }
   path = path.toLowerCase();
-  if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
-    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).forget(cacheName, path); where cacheName is undefined
-, number or string and path is a string&#x27;);
+  if (typeof cacheName !== 'number' &amp;&amp; typeof cacheName !== 'string') {
+    throw new util.PluginError(pluginName, 'Usage: require("gulp-remember").forget(cacheName, path); where cacheName is undefined
+, number or string and path is a string');
   }
   if (caches[cacheName] === undefined) {
-    util.log(pluginName, &#x27;- .forget() warning: cache &#x27; + cacheName + &#x27; not found&#x27;);
+    util.log(pluginName, '- .forget() warning: cache ' + cacheName + ' not found');
   } else if (caches[cacheName][path] === undefined) {
-    util.log(pluginName, &#x27;- .forget() warning: file &#x27; + path + &#x27; not found in cache &#x27; + cacheName);
+    util.log(pluginName, '- .forget() warning: file ' + path + ' not found in cache ' + cacheName);
   } else {
     delete caches[cacheName][path];
   }
@@ -272,12 +265,12 @@ Get a raw remember cache. This can be useful for checking state of the cache, li
     <li>example usage<pre class="apidocCodePre">...
 });
 
-gulp.task(&#x27;watch&#x27;, function () {
-  var watcher = gulp.watch(scriptsGlob, [&#x27;scripts&#x27;]); // watch the same files in our scripts task
-  watcher.on(&#x27;change&#x27;, function (event) {
-    if (event.type === &#x27;deleted&#x27;) { // if a file is deleted, forget about it
-      delete cache.caches[&#x27;scripts&#x27;][event.path];
-      remember.<span class="apidocCodeKeywordSpan">forget</span>(&#x27;scripts&#x27;, event.path);
+gulp.task('watch', function () {
+  var watcher = gulp.watch(scriptsGlob, ['scripts']); // watch the same files in our scripts task
+  watcher.on('change', function (event) {
+    if (event.type === 'deleted') { // if a file is deleted, forget about it
+      delete cache.caches['scripts'][event.path];
+      remember.<span class="apidocCodeKeywordSpan">forget</span>('scripts', event.path);
     }
   });
 });
@@ -300,12 +293,12 @@ gulp.task(&#x27;watch&#x27;, function () {
   if (arguments.length === 0) {
     cacheName = defaultName;
   }
-  if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
-    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).forgetAll(cacheName); where cacheName is undefined,
-number or string&#x27;);
+  if (typeof cacheName !== 'number' &amp;&amp; typeof cacheName !== 'string') {
+    throw new util.PluginError(pluginName, 'Usage: require("gulp-remember").forgetAll(cacheName); where cacheName is undefined,
+number or string');
   }
   if (caches[cacheName] === undefined) {
-    util.log(pluginName, &#x27;- .forget() warning: cache &#x27; + cacheName + &#x27; not found&#x27;);
+    util.log(pluginName, '- .forget() warning: cache ' + cacheName + ' not found');
   } else {
     caches[cacheName] = {};
   }
@@ -365,9 +358,9 @@ Type: `String`
   if (arguments.length === 0) {
     cacheName = defaultName;
   }
-  if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
-    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).cacheFor(cacheName); where cacheName is undefined, number
- or string&#x27;);
+  if (typeof cacheName !== 'number' &amp;&amp; typeof cacheName !== 'string') {
+    throw new util.PluginError(pluginName, 'Usage: require("gulp-remember").cacheFor(cacheName); where cacheName is undefined, number
+ or string');
   }
   return caches[cacheName];
 }</pre></li>
@@ -410,14 +403,14 @@ Get a raw remember cache. This can be useful for checking state of the cache, li
     cacheName = defaultName;
   }
   path = path.toLowerCase();
-  if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
-    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).forget(cacheName, path); where cacheName is undefined
-, number or string and path is a string&#x27;);
+  if (typeof cacheName !== 'number' &amp;&amp; typeof cacheName !== 'string') {
+    throw new util.PluginError(pluginName, 'Usage: require("gulp-remember").forget(cacheName, path); where cacheName is undefined
+, number or string and path is a string');
   }
   if (caches[cacheName] === undefined) {
-    util.log(pluginName, &#x27;- .forget() warning: cache &#x27; + cacheName + &#x27; not found&#x27;);
+    util.log(pluginName, '- .forget() warning: cache ' + cacheName + ' not found');
   } else if (caches[cacheName][path] === undefined) {
-    util.log(pluginName, &#x27;- .forget() warning: file &#x27; + path + &#x27; not found in cache &#x27; + cacheName);
+    util.log(pluginName, '- .forget() warning: file ' + path + ' not found in cache ' + cacheName);
   } else {
     delete caches[cacheName][path];
   }
@@ -425,12 +418,12 @@ Get a raw remember cache. This can be useful for checking state of the cache, li
     <li>example usage<pre class="apidocCodePre">...
 });
 
-gulp.task(&#x27;watch&#x27;, function () {
-  var watcher = gulp.watch(scriptsGlob, [&#x27;scripts&#x27;]); // watch the same files in our scripts task
-  watcher.on(&#x27;change&#x27;, function (event) {
-    if (event.type === &#x27;deleted&#x27;) { // if a file is deleted, forget about it
-      delete cache.caches[&#x27;scripts&#x27;][event.path];
-      remember.<span class="apidocCodeKeywordSpan">forget</span>(&#x27;scripts&#x27;, event.path);
+gulp.task('watch', function () {
+  var watcher = gulp.watch(scriptsGlob, ['scripts']); // watch the same files in our scripts task
+  watcher.on('change', function (event) {
+    if (event.type === 'deleted') { // if a file is deleted, forget about it
+      delete cache.caches['scripts'][event.path];
+      remember.<span class="apidocCodeKeywordSpan">forget</span>('scripts', event.path);
     }
   });
 });
@@ -458,12 +451,12 @@ gulp.task(&#x27;watch&#x27;, function () {
   if (arguments.length === 0) {
     cacheName = defaultName;
   }
-  if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
-    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).forgetAll(cacheName); where cacheName is undefined,
-number or string&#x27;);
+  if (typeof cacheName !== 'number' &amp;&amp; typeof cacheName !== 'string') {
+    throw new util.PluginError(pluginName, 'Usage: require("gulp-remember").forgetAll(cacheName); where cacheName is undefined,
+number or string');
   }
   if (caches[cacheName] === undefined) {
-    util.log(pluginName, &#x27;- .forget() warning: cache &#x27; + cacheName + &#x27; not found&#x27;);
+    util.log(pluginName, '- .forget() warning: cache ' + cacheName + ' not found');
   } else {
     caches[cacheName] = {};
   }
@@ -517,3 +510,4 @@ Type: `String`
     ]
 </div>
 </div>
+</body></html>
