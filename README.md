@@ -1,6 +1,6 @@
 # npmdoc-gulp-remember
 
-#### api documentation for  [gulp-remember (v0.3.1)](http://github.com/ahaurw01/gulp-remember)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-remember.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-remember) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-remember.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-remember)
+#### basic api documentation for  [gulp-remember (v0.3.1)](http://github.com/ahaurw01/gulp-remember)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-remember.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-remember) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-remember.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-remember)
 
 #### Adds previously seen files back into the stream.
 
@@ -73,7 +73,8 @@
     "scripts": {
         "test": "mocha --reporter spec"
     },
-    "version": "0.3.1"
+    "version": "0.3.1",
+    "bin": {}
 }
 ```
 
