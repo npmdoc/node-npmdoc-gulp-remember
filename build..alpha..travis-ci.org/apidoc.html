@@ -97,67 +97,6 @@
 
         </li>
 
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.gulp-remember.toString">
-            function <span class="apidocSignatureSpan">gulp-remember.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-remember.cacheFor">module gulp-remember.cacheFor</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.gulp-remember.cacheFor.cacheFor">
-            function <span class="apidocSignatureSpan">gulp-remember.</span>cacheFor
-            <span class="apidocSignatureSpan">(cacheName)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-remember.forget">module gulp-remember.forget</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.gulp-remember.forget.forget">
-            function <span class="apidocSignatureSpan">gulp-remember.</span>forget
-            <span class="apidocSignatureSpan">(cacheName, path)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-remember.forgetAll">module gulp-remember.forgetAll</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.gulp-remember.forgetAll.forgetAll">
-            function <span class="apidocSignatureSpan">gulp-remember.</span>forgetAll
-            <span class="apidocSignatureSpan">(cacheName)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-remember.toString">module gulp-remember.toString</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.gulp-remember.toString.toString">
-            function <span class="apidocSignatureSpan">gulp-remember.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
     </ol></li>
 
 </ol></div>
@@ -224,21 +163,20 @@
   return caches[cacheName];
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
+ * @param cacheName {string} name of the cache to retrieve
+ */
+gulpRemember.cacheFor = function (cacheName) {
+  if (arguments.length === 0) {
+    cacheName = defaultName;
+  }
+  if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
+    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).<span class="apidocCodeKeywordSpan">cacheFor
+</span>(cacheName); where cacheName is undefined, number or string&#x27;);
+  }
+  return caches[cacheName];
+}
 
-Type: `String`
-
-The name of the remember cache you want to wipe. You do not need to pass this if you want to operate on the default remember cache
-.
-
-**Note:** If the name does not refer to a cache that exists, a warning is logged.
-
-### remember.<span class="apidocCodeKeywordSpan">cacheFor</span>(name)
-
-Get a raw remember cache. This can be useful for checking state of the cache, like whether or not a file has been seen before.
-
-**Note:** Remembering or forgetting files by interacting directly with this returned object is not recommended.
-
-#### name (optional)
+module.exports = gulpRemember;
 ...</pre></li>
     </ul>
 
@@ -270,20 +208,22 @@ Get a raw remember cache. This can be useful for checking state of the cache, li
   }
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-});
-
-gulp.task(&#x27;watch&#x27;, function () {
-  var watcher = gulp.watch(scriptsGlob, [&#x27;scripts&#x27;]); // watch the same files in our scripts task
-  watcher.on(&#x27;change&#x27;, function (event) {
-    if (event.type === &#x27;deleted&#x27;) { // if a file is deleted, forget about it
-      delete cache.caches[&#x27;scripts&#x27;][event.path];
-      remember.<span class="apidocCodeKeywordSpan">forget</span>(&#x27;scripts&#x27;, event.path);
-    }
-  });
-});
-```
-
-## API
+gulpRemember.forget = function (cacheName, path) {
+if (arguments.length === 1) {
+  path = cacheName;
+  cacheName = defaultName;
+}
+path = path.toLowerCase();
+if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
+  throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).<span class="apidocCodeKeywordSpan">forget
+</span>(cacheName, path); where cacheName is undefined, number or string and path is a string&#x27;);
+}
+if (caches[cacheName] === undefined) {
+  util.log(pluginName, &#x27;- .forget() warning: cache &#x27; + cacheName + &#x27; not found&#x27;);
+} else if (caches[cacheName][path] === undefined) {
+  util.log(pluginName, &#x27;- .forget() warning: file &#x27; + path + &#x27; not found in cache &#x27; + cacheName);
+} else {
+  delete caches[cacheName][path];
 ...</pre></li>
     </ul>
 
@@ -311,201 +251,23 @@ number or string&#x27;);
   }
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-
-**Important note!** The path you pass to `forget` must be the path of the *processed* file. You may encounter instances where your
- source file is `some/path/script.coffee` while the processed file is `some/path/script.js`. Because anything could happen before
- you `remember` a file, it is up to you to know how you need to `forget` it with the correct path.
-
-If you want to `forget` files using their name history, you might want to use [gulp-remember-history](https://www.npmjs.com/package
-/gulp-remember-history).
-
-**Another note:** If the path does not match a file object that exists in the given cache, a warning is logged. Thanks to @jcppman
- for this.
-
-### remember.<span class="apidocCodeKeywordSpan">forgetAll</span>(name)
-
-Drops all files from a remember cache.
-
-#### name (optional)
-
-Type: `String`
-...</pre></li>
-    </ul>
-
-
-
-    <h2>
-        <a href="#apidoc.element.gulp-remember.toString" id="apidoc.element.gulp-remember.toString">
-        function <span class="apidocSignatureSpan">gulp-remember.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">toString = function () {
-    return text;
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.gulp-remember.cacheFor" id="apidoc.module.gulp-remember.cacheFor">module gulp-remember.cacheFor</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.gulp-remember.cacheFor.cacheFor" id="apidoc.element.gulp-remember.cacheFor.cacheFor">
-        function <span class="apidocSignatureSpan">gulp-remember.</span>cacheFor
-        <span class="apidocSignatureSpan">(cacheName)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">cacheFor = function (cacheName) {
+ * @param cacheName {string} name of the cache to wipe
+ */
+gulpRemember.forgetAll = function (cacheName) {
   if (arguments.length === 0) {
     cacheName = defaultName;
   }
   if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
-    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).cacheFor(cacheName); where cacheName is undefined, number
- or string&#x27;);
-  }
-  return caches[cacheName];
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-
-Type: `String`
-
-The name of the remember cache you want to wipe. You do not need to pass this if you want to operate on the default remember cache
-.
-
-**Note:** If the name does not refer to a cache that exists, a warning is logged.
-
-### remember.<span class="apidocCodeKeywordSpan">cacheFor</span>(name)
-
-Get a raw remember cache. This can be useful for checking state of the cache, like whether or not a file has been seen before.
-
-**Note:** Remembering or forgetting files by interacting directly with this returned object is not recommended.
-
-#### name (optional)
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.gulp-remember.forget" id="apidoc.module.gulp-remember.forget">module gulp-remember.forget</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.gulp-remember.forget.forget" id="apidoc.element.gulp-remember.forget.forget">
-        function <span class="apidocSignatureSpan">gulp-remember.</span>forget
-        <span class="apidocSignatureSpan">(cacheName, path)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">forget = function (cacheName, path) {
-  if (arguments.length === 1) {
-    path = cacheName;
-    cacheName = defaultName;
-  }
-  path = path.toLowerCase();
-  if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
-    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).forget(cacheName, path); where cacheName is undefined
-, number or string and path is a string&#x27;);
-  }
-  if (caches[cacheName] === undefined) {
-    util.log(pluginName, &#x27;- .forget() warning: cache &#x27; + cacheName + &#x27; not found&#x27;);
-  } else if (caches[cacheName][path] === undefined) {
-    util.log(pluginName, &#x27;- .forget() warning: file &#x27; + path + &#x27; not found in cache &#x27; + cacheName);
-  } else {
-    delete caches[cacheName][path];
-  }
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-});
-
-gulp.task(&#x27;watch&#x27;, function () {
-  var watcher = gulp.watch(scriptsGlob, [&#x27;scripts&#x27;]); // watch the same files in our scripts task
-  watcher.on(&#x27;change&#x27;, function (event) {
-    if (event.type === &#x27;deleted&#x27;) { // if a file is deleted, forget about it
-      delete cache.caches[&#x27;scripts&#x27;][event.path];
-      remember.<span class="apidocCodeKeywordSpan">forget</span>(&#x27;scripts&#x27;, event.path);
-    }
-  });
-});
-```
-
-## API
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.gulp-remember.forgetAll" id="apidoc.module.gulp-remember.forgetAll">module gulp-remember.forgetAll</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.gulp-remember.forgetAll.forgetAll" id="apidoc.element.gulp-remember.forgetAll.forgetAll">
-        function <span class="apidocSignatureSpan">gulp-remember.</span>forgetAll
-        <span class="apidocSignatureSpan">(cacheName)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">forgetAll = function (cacheName) {
-  if (arguments.length === 0) {
-    cacheName = defaultName;
-  }
-  if (typeof cacheName !== &#x27;number&#x27; &#x26;&#x26; typeof cacheName !== &#x27;string&#x27;) {
-    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).forgetAll(cacheName); where cacheName is undefined,
-number or string&#x27;);
+    throw new util.PluginError(pluginName, &#x27;Usage: require(&#x22;gulp-remember&#x22;).<span class="apidocCodeKeywordSpan">forgetAll
+</span>(cacheName); where cacheName is undefined, number or string&#x27;);
   }
   if (caches[cacheName] === undefined) {
     util.log(pluginName, &#x27;- .forget() warning: cache &#x27; + cacheName + &#x27; not found&#x27;);
   } else {
     caches[cacheName] = {};
   }
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-
-**Important note!** The path you pass to `forget` must be the path of the *processed* file. You may encounter instances where your
- source file is `some/path/script.coffee` while the processed file is `some/path/script.js`. Because anything could happen before
- you `remember` a file, it is up to you to know how you need to `forget` it with the correct path.
-
-If you want to `forget` files using their name history, you might want to use [gulp-remember-history](https://www.npmjs.com/package
-/gulp-remember-history).
-
-**Another note:** If the path does not match a file object that exists in the given cache, a warning is logged. Thanks to @jcppman
- for this.
-
-### remember.<span class="apidocCodeKeywordSpan">forgetAll</span>(name)
-
-Drops all files from a remember cache.
-
-#### name (optional)
-
-Type: `String`
+}
 ...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.gulp-remember.toString" id="apidoc.module.gulp-remember.toString">module gulp-remember.toString</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.gulp-remember.toString.toString" id="apidoc.element.gulp-remember.toString.toString">
-        function <span class="apidocSignatureSpan">gulp-remember.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
 
